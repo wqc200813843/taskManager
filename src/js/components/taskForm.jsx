@@ -1,30 +1,28 @@
 import React from 'react';
-import { Form, Radio } from 'antd';
+import { Form, Radio,DatePicker,Input,InputNumber} from 'antd';
 
+const {Textarea} = Input;
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-const layout = {
-    labelCol: { span: 4 },
-    wrapperCol: { span: 20 },
-};
-const difficultyOptions=[
-  { label: '非常难', value: 1 },
-  { label: '比较难', value: 2 },
-  { label: '简单', value: 3 },
-]
 class TaskForm extends React.Component {
-    componentWillMount() {
-        this.props.updateForm(this.props.form);
-    }
     render() {
+        const layout = {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 20 },
+        };
+        const difficultyOptions = [
+            { label: '非常难', value: 1 },
+            { label: '比较难', value: 2 },
+            { label: '简单', value: 3 },
+        ]
         const { getFieldDecorator } = this.props.form;
-        const taskItem=this.props.taskItem;
+        const taskItem = this.props.taskItem;
         return (
             <Form>
                 <FormItem {...layout} label="类型">
                     {getFieldDecorator('type', {
-                        initialValue:taskItem.type,
+                        initialValue: taskItem.type,
                         rules: [{
                             required: true, message: '请选择类型!',
                         }],
@@ -38,32 +36,60 @@ class TaskForm extends React.Component {
                 </FormItem>
                 <FormItem {...layout} label="难易程度">
                     {getFieldDecorator('difficulty', {
-                        initialValue:taskItem.difficulty,
+                        initialValue: taskItem.difficulty,
                         rules: [{
                             required: true, message: '请选择难易程度!',
                         }],
                     })(
-                        <RadioGroup options={difficultyOptions}  />
+                        <RadioGroup options={difficultyOptions} />
+                        )}
+                </FormItem>
+                <FormItem {...layout} label="名称">
+                    {getFieldDecorator('name', {
+                        initialValue: taskItem.name,
+                        rules: [{
+                            required: true, message: '请输入任务名称！',
+                        }],
+                    })(
+                        <Input style={{width:'60%'}}/>
+                        )}
+                </FormItem>
+                <FormItem {...layout} label="时限">
+                    {getFieldDecorator('timeLimited', {
+                        initialValue: taskItem.timeLimited,
+                        rules: [{
+                            required: true, message: '请输入任务时限！',
+                        }],
+                    })(
+                        <DatePicker />
+                        )}
+                </FormItem>
+                <FormItem {...layout} label="需时">
+                    {getFieldDecorator('needTime', {
+                        initialValue: taskItem.needTime,
+                        rules: [{
+                            required: true, message: '请输入需时！',
+                        }],
+                    })(
+                        <InputNumber min={0}/>
+                        )}
+                </FormItem>
+                <FormItem {...layout} label="完成">
+                    {getFieldDecorator('complete', {
+                        initialValue: taskItem.complete,
+                    })(
+                        <Switch/>
+                        )}
+                </FormItem>
+                <FormItem {...layout} label="描述">
+                    {getFieldDecorator('memo', {
+                        initialValue: taskItem.memo,
+                    })(
+                        <Textarea col={0}/>
                         )}
                 </FormItem>
             </Form>
         )
     }
 }
-export default Form.create({
-    /*onFieldsChange(props,changedFields){
-        props.onChange(changedFields);
-    },
-    mapPropsToFields(props){
-        return {
-            type:{
-                ...props.type,
-                value:(props.type&&props.type.value)||''
-            },
-            difficulty:{
-                ...props.difficulty,
-                value:(props.difficulty&&props.difficulty.value)||''
-            }
-        }
-    }*/
-})(TaskForm)
+export default Form.create()(TaskForm)

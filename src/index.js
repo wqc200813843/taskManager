@@ -4,24 +4,26 @@ import './index.css';
 import TaskTable from './js/components/taskTable';
 import TaskForm from './js/components/taskForm';
 import {Button,Modal} from 'antd';
+
+const itemDefault={type:'1',difficulty:2,needTime:0,name:'',timeLimited:'',memo:''};/*任务添加初始值*/
 class TaskManager extends React.Component {
     constructor(props){
         super(props);
-        this.currentItem={type:'1',difficulty:2};
+        this.currentItem={};/*任务添加初始值*/
+        this.form=null;/*任务编辑表单*/
     }
     state = {
         taskList: [],/*任务列表*/
         taskModalTitle:'添加任务',/*任务对话框标题*/
-        editFormVisible: false, /*编辑任务对话框显隐*/
-        form:null,/*任务编辑表单*/
-        currentItem:{type:'1',difficulty:2}/*当前任务*/
+        editFormVisible: false/*编辑任务对话框显隐*/
     };
     editTask=(item)=>{/*编辑任务*/
+        item?
         this.setState({
-            /*currentItem:Object.assign({},item),*/
             editFormVisible:true,
             taskModalTitle:item?'编辑任务':'添加任务'
         })
+         this.form&&this.form.resetFields();
     }
     saveTask=(item)=>{/*保存编辑任务*/
         this.state.form.validateFields((err,values)=>{
@@ -43,7 +45,7 @@ class TaskManager extends React.Component {
         })
     }*/
     updateForm=(form)=>{
-        this.setState({form});
+        this.form=form;
     }
     render() {
         const currentItem=Object.assign({},this.currentItem);
@@ -54,7 +56,7 @@ class TaskManager extends React.Component {
                 visible={this.state.editFormVisible}
                 onOk={this.saveTask}
                 onCancel={this.closeEditForm}>
-                <TaskForm taskItem={currentItem}  /*{...currentItem} onChange={this.editFormChange}*/ updateForm={this.updateForm}></TaskForm>
+                <TaskForm taskItem={currentItem} ref={this.updateForm}  /*{...currentItem} onChange={this.editFormChange}*/></TaskForm>
                 </Modal>
             </div>
         )
