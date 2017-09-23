@@ -1,24 +1,35 @@
 import React from 'react';
 import { Table, Button, Input, Icon ,Switch} from 'antd';
-import * as taskManager from '../interface/taskManager';
+import * as taskManager from '../interface/taskManager.js';
 
-const dataSource = [];
 const sortOptions = {
     sortKey: '',
     sortOrder: 'descend'
 };
 export default class extends React.Component {
+    componentWillMount() {
+       this.searchTaskList();
+    }
     state = {
         selectedRowKeys: [],
         loading: false,
         filterDropdownVisible: false,
         searchText: '',
-        filtered: false
+        filtered: false,
+        dataSource:[]
     };
+    /**
+     * 
+     * 
+     */
+    searchTaskList=()=>{
+        taskManager.taskList({}).then(res=> {
+            this.setState({
+                dataSource:res&&res.slice()
+            })
+        })
+    }
     onInputChange = (e) => {
-        // taskManager.taskList({}).then(function (res) {
-        //     dataSource=res;
-        // })
         this.setState({
             searchText: e.target.value
         })
@@ -147,7 +158,7 @@ export default class extends React.Component {
         return (
             <div>
                 <Button onClick={this.start} type="primary" disabled={!hasSelected} loading={loading}>重置</Button>
-                <Table onChange={this.state.updateFilterOptions} className="diyTable" bordered rowSelection={rowSelection} dataSource={this.props.dataSource} columns={columns} />
+                <Table onChange={this.state.updateFilterOptions} className="diyTable" bordered rowSelection={rowSelection} dataSource={this.state.dataSource} columns={columns} />
             </div>
         )
     }

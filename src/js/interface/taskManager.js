@@ -12,4 +12,16 @@ function taskList(filter) {
             });
     })
 }
-export {taskList};
+function addTask(item) {
+    item._ = Date.now();
+    return new Promise((resolve, reject) => {
+        axios.post('/taskList/add?' + common.param(item))
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    })
+}
+export {taskList,addTask};

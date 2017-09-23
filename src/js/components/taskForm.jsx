@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Radio,DatePicker,Input,InputNumber} from 'antd';
+import { Form, Radio,DatePicker,Input,InputNumber,Switch} from 'antd';
 
-const {Textarea} = Input;
+const {TextArea} = Input;
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -85,7 +85,7 @@ class TaskForm extends React.Component {
                     {getFieldDecorator('memo', {
                         initialValue: taskItem.memo,
                     })(
-                        <Textarea col={0}/>
+                        <TextArea rows={0}/>
                         )}
                 </FormItem>
             </Form>
